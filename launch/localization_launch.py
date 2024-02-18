@@ -11,12 +11,23 @@ def generate_launch_description():
         'params_file',
         default_value=params_file,
         description='Full path to the ROS2 parameters file to use for the slam_toolbox node')
-
+    declare_initial_pose_cmd = DeclareLaunchArgument(
+        'initial_pose',
+        default_value='[0.0,0.0,0.0]',
+        description='Enable initial_pose')
+    declare_map_cmd = DeclareLaunchArgument(
+        'map',
+        default_value='mapa',
+        description='Enable map')
     return LaunchDescription([
         declare_params_file_cmd,
+        declare_initial_pose_cmd,
+        declare_map_cmd,
         launch_ros.actions.Node(
           parameters=[
-            params_file
+            params_file,
+            {'map_file_name':LaunchConfiguration('map')},
+            {'map_start_pose':LaunchConfiguration('initial_pose')}
           ],
           package='slam_toolbox',
           executable='localization_slam_toolbox_node',
