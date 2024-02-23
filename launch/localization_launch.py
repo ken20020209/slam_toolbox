@@ -32,6 +32,7 @@ def generate_launch_description():
           package='slam_toolbox',
           executable='localization_slam_toolbox_node',
           name='slam_toolbox',
-          output='screen'
+          output='screen',
+          remappings=[('/scan', 'scan')]
         )
     ])
