@@ -6,7 +6,12 @@ from launch.actions import DeclareLaunchArgument, LogInfo
 
 def generate_launch_description():
     params_file = LaunchConfiguration('params_file', default=get_package_share_directory("slam_toolbox") + '/config/mapper_params_localization.yaml')
-
+    namespace=LaunchConfiguration('namespace',default='RobotDogConnector')
+    namespace_declare=DeclareLaunchArgument(
+            'namespace',
+            default_value=namespace,
+            description='Name of the RobotDogConnector node'
+        )
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
         default_value=params_file,
@@ -23,11 +28,14 @@ def generate_launch_description():
         declare_params_file_cmd,
         declare_initial_pose_cmd,
         declare_map_cmd,
+        namespace_declare,
         launch_ros.actions.Node(
           parameters=[
             params_file,
             {'map_file_name':LaunchConfiguration('map')},
-            {'map_start_pose':LaunchConfiguration('initial_pose')}
+            {'map_start_pose':LaunchConfiguration('initial_pose')},
+            {'odom_frame':PythonExpression(["'",namespace,"'+","'/odom'"])},
+            {'base_frame':PythonExpression(["'",namespace,"'+","'/base_footprint'"])},
           ],
           package='slam_toolbox',
           executable='localization_slam_toolbox_node',
