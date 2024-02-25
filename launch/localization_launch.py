@@ -6,7 +6,7 @@ from launch.actions import DeclareLaunchArgument, LogInfo
 
 def generate_launch_description():
     params_file = LaunchConfiguration('params_file', default=get_package_share_directory("slam_toolbox") + '/config/mapper_params_localization.yaml')
-    namespace=LaunchConfiguration('namespace',default='RobotDogConnector')
+    namespace=LaunchConfiguration('namespace',default='')
     namespace_declare=DeclareLaunchArgument(
             'namespace',
             default_value=namespace,
